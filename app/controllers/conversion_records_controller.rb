@@ -4,11 +4,12 @@ class ConversionRecordsController < ApplicationController
   end
 
   def create
-    @new_record = Convertation::CreatePdf.call(params[:id])
+    @new_record = Convertation::GettingSvg.call(params[:id])
   end
 
   def export
-    Convertation::Dowload.call(@new_record.id)
+    Convertation::ConvertToPdf.call(@new_record.id)
+    Convertation::DownloadPdf.call(@new_record.id)
   end
 
   private
