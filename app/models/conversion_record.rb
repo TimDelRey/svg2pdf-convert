@@ -1,0 +1,2 @@
+class ConversionRecord < ApplicationRecord
+end
