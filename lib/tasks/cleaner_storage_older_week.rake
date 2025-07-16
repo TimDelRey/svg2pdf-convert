@@ -1,11 +1,11 @@
 namespace :storage do
   desc "Удалить SVG и PDF файлы из Active Storage старше недели"
   task cleanup_old_files: :environment do
-    cutoff_date = 1.week.ago
+    # cutoff_date = 1.week.ago
 
     attachments = ActiveStorage::Attachment
                     .joins(:blob)
-                    .where("active_storage_blobs.created_at < ?", cutoff_date)
+                    # .where("active_storage_blobs.created_at < ?", cutoff_date)
                     .where("active_storage_blobs.filename LIKE ? OR active_storage_blobs.filename LIKE ?", "%.svg", "%.pdf")
 
     puts "Найдено #{attachments.count} файлов для удаления..."

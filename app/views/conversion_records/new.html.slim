@@ -11,15 +11,4 @@ h2 Generate PDF from SVG
       = button_to '⬇️ Export PDF', export_conversion_record_path(@record), method: :get, class: 'btn btn-primary', id: 'export-btn'
     - else
       = button_tag '⬇️ Export PDF', class: 'btn btn-primary', id: 'export-btn', disabled: true
-
-javascript:
-  document.addEventListener('DOMContentLoaded', function () {
-    const fileInput = document.getElementById('file-upload');
-    const form = document.getElementById('upload-form');
-
-    fileInput.addEventListener('change', function () {
-      if (fileInput.files.length > 0) {
-        form.submit();
-      }
-    });
-  });
+= javascript_include_tag 'views/conversion_records/new'
