@@ -4,11 +4,6 @@ h2 Generate PDF from SVG
   .field
     = f.file_field :svg_file, required: true, class: 'btn btn-secondary', id: 'file-upload'
 
-  .status
-    - if @record&.persisted?
-      p ✅ Ready to convertation
-    - else
-      p ⏱️ Waiting for SVG upload
-
+  = form_status(@record)
   .actions
     = f.submit '⬇️ Export PDF', class: 'btn btn-primary', id: 'export-btn', disabled: true
