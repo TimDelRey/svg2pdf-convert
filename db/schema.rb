@@ -17,6 +17,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_16_154047) do
   create_table "conversion_records", force: :cascade do |t|
     t.string "status", default: "pending"
     t.text "error_message"
+    t.boolean "cropping_fields", null: false
+    t.boolean "watermark", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
