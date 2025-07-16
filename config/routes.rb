@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  get "conversion_records/new"
-  get "conversion_records/create"
-  get "conversion_records/download"
+  root to: 'conversion_records#new'
   
+  resources :conversion_records, only: :new do
+    get :download, on: :member
+  end
 end
