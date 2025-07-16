@@ -1,4 +1,14 @@
-= form_with model: @record, local: true do |f|
-  = f.label :svg_file
-  = f.file_field :svg_file
-  = f.submit 'Upload and Convert'
+h2 Generate PDF from SVG
+
+= form_with model: @record, url: conversion_records_path, local: true, html: { multipart: true } do |f|
+  .field
+    = f.file_field :svg_file, required: true, class: 'btn btn-secondary', id: 'file-upload'
+
+  .status
+    - if @record&.persisted?
+      p ✅ Ready to convertation
+    - else
+      p ⏱️ Waiting for SVG upload
+
+  .actions
+    = f.submit '⬇️ Export PDF', class: 'btn btn-primary', id: 'export-btn', disabled: true

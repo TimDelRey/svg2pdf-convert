@@ -4,18 +4,11 @@ class ConversionRecordsController < ApplicationController
   end
 
   def create
-    @record = ConversionRecord.new(conversion_record_params)
-
-    if @document.save
-      redirect_to download_document_path(@document)
-    else
-      render :new
-    end
+    @new_record = Convertation::CreatePdf.call(params[:id])
   end
 
   def export
-    record = Convertation::CreatePdf.call(params[:id])
-    Convertation::Dowload.call([record.id])
+    Convertation::Dowload.call(@new_record.id)
   end
 
   private
