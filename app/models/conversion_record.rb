@@ -11,8 +11,8 @@
 #  updated_at      :datetime         not null
 #
 class ConversionRecord < ApplicationRecord
-  has_one_attached :svg_file
-  has_one_attached :pdf_file
+  has_one_attached :svg_file, dependent: :purge_later
+  has_one_attached :pdf_file, dependent: :purge_later
 
   validates :svg_file, presence: true
 end
