@@ -1,2 +1,4 @@
-h1 ConversionRecords#new
-p Find me in app/views/conversion_records/new.html.slim
+= form_with model: @record, local: true do |f|
+  = f.label :svg_file
+  = f.file_field :svg_file
+  = f.submit 'Upload and Convert'

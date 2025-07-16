@@ -1,21 +1,21 @@
 class ConversionRecordsController < ApplicationController
   def new
-    @record = conversion_record.new
+    @record = ConversionRecord.new
   end
 
   def create
-    @record = Conversion_record.new(conversion_record_params)
+    @record = ConversionRecord.new(conversion_record_params)
 
-    @document.save ? redirect_to download_document_path(@document) : render :new
+    if @document.save
+      redirect_to download_document_path(@document)
+    else
+      render :new
+    end
   end
 
-  def download
-    receipt = Conversion_record.find(params[:id])
-    if receipt.xls_file.attached?
-      redirect_to url_for(receipt.xls_file)
-    else
-      head :not_found
-    end
+  def export
+    record = Convertation::CreatePdf.call(params[:id])
+    Convertation::Dowload.call([record.id])
   end
 
   private
