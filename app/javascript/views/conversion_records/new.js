@@ -1,18 +1,30 @@
 document.addEventListener('DOMContentLoaded', function () {
   const fileInput = document.getElementById('file-upload');
   const form = document.getElementById('upload-form');
-  const exportBtn = document.getElementById('export-btn');
+  const downloadBtn = document.getElementById('download-btn');
+  const getLinkBtn = document.getElementById('get-link-btn');
+  const pdfLinkInput = document.getElementById('pdf-link');
   const statusDiv = document.querySelector('.status');
+
+  let recordId = null;
+
+  const disableButtons = () => {
+    downloadBtn.disabled = true;
+    getLinkBtn.disabled = true;
+    pdfLinkInput.value = '';
+  };
 
   fileInput.addEventListener('change', function () {
     if (fileInput.files.length > 0) {
+      disableButtons();
+      statusDiv.textContent = '⏳ Uploading & Converting...';
+
       const formData = new FormData(form);
+
       fetch(form.action, {
         method: 'POST',
         body: formData,
-        headers: {
-          'Accept': 'application/json'
-        },
+        headers: { 'Accept': 'application/json' },
         credentials: 'same-origin'
       })
       .then(response => {
@@ -20,25 +32,52 @@ document.addEventListener('DOMContentLoaded', function () {
         return response.json();
       })
       .then(data => {
-        statusDiv.textContent = '✅ Ready to convertation';
+        recordId = data.id;
 
-        exportBtn.disabled = false;
-        exportBtn.setAttribute('data-record-id', data.id);
+        // Подождем, пока PDF будет готов
+        const tryFetchPdf = (attemptsLeft = 10) => {
+          fetch(`/conversion_records/${recordId}`)
+            .then(resp => {
+              if (!resp.ok) throw new Error('Not ready');
+              return resp.json();
+            })
+            .then(data => {
+              statusDiv.textContent = '✅ PDF ready!';
+              downloadBtn.disabled = false;
+              getLinkBtn.disabled = false;
+              downloadBtn.setAttribute('data-record-id', recordId);
+              getLinkBtn.setAttribute('data-url', data.pdf_url);
+            })
+            .catch(() => {
+              if (attemptsLeft > 0) {
+                setTimeout(() => tryFetchPdf(attemptsLeft - 1), 1000);
+              } else {
+                statusDiv.textContent = '❌ Conversion timeout';
+              }
+            });
+        };
+
+        tryFetchPdf();
       })
       .catch(() => {
         statusDiv.textContent = '❌ Upload failed';
-        exportBtn.disabled = true;
+        disableButtons();
       });
     }
   });
 
-  exportBtn.addEventListener('click', function(e) {
+  downloadBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    if (!exportBtn.disabled) {
-      const recordId = exportBtn.getAttribute('data-record-id');
-      if (recordId) {
-        window.location.href = `/conversion_records/${recordId}/export`;
-      }
+    if (!recordId) return;
+    window.location.href = `/conversion_records/${recordId}/download`;
+  });
+
+  getLinkBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    const url = getLinkBtn.getAttribute('data-url');
+    if (url) {
+      pdfLinkInput.value = url;
+      pdfLinkInput.select();
     }
   });
 });
