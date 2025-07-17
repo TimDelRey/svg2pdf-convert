@@ -71,6 +71,8 @@ group :development, :test do
   gem 'annotaterb'
   gem 'rswag'
   gem 'rubocop-rails-omakase', require: false
+
+  gem 'dotenv-rails'
 end
 
 group :development do

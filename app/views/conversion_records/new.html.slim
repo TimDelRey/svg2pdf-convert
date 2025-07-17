@@ -1,14 +1,16 @@
 h2 Generate PDF from SVG
 
 = form_with model: @record, url: conversion_records_path, local: true, html: { multipart: true, id: 'upload-form' } do |f|
-
   .field
     = f.file_field :svg_file, required: true, class: 'btn btn-secondary', id: 'file-upload'
 
-  = form_status(@record)
-  .actions
-    - if @record&.persisted?
-      = button_to '⬇️ Export PDF', export_conversion_record_path(@record), method: :get, class: 'btn btn-primary', id: 'export-btn'
-    - else
-      = button_tag '⬇️ Export PDF', class: 'btn btn-primary', id: 'export-btn', disabled: true
+  .status
+    = form_status(@record)
+
+- if @record&.persisted?
+  = button_tag '⬇️ Export PDF', type: 'button', class: 'btn btn-primary', id: 'export-btn'
+- else
+  = button_tag '⬇️ Export PDF', type: 'button', class: 'btn btn-primary', id: 'export-btn', disabled: true
+
+
 = javascript_include_tag 'views/conversion_records/new'

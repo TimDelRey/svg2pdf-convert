@@ -3,6 +3,7 @@ class ConversionRecordsController < ApplicationController
     @record = ConversionRecord.new
   end
 
+
   def create
     @record = Convertation::GettingSvg.call(params[:conversion_record][:svg_file])
 
@@ -17,33 +18,20 @@ class ConversionRecordsController < ApplicationController
     end
   end
 
-
   def export
     @record = ConversionRecord.find(params[:id])
-    updated_record = ExportInteraction.run(record: @record)
+
+    unless @record.pdf_file.attached?
+      outcome = Convertation::ConvertToPdf.call(@record)
+    end
 
     if @record.pdf_file.attached?
       send_data @record.pdf_file.download,
-                filename: @record.pdf_file.filename.to_s,
+                filename: "converted_#{@record.id}.pdf",
                 type: 'application/pdf',
-                disposition: 'inline'
+                disposition: 'attachment'
     else
-      render json: { message: 'PDF conversion failed.' }, status: :unprocessable_entity
+      render json: { message: 'PDF conversion failed' }, status: :unprocessable_entity
     end
-
-    # @outcome = ::ExportInteraction.run(@record)
-    
-    # if outcome.valid?
-    #   # Convertation::DownloadPdf.call(@record.id)
-    #   outcome.pdf_file.download
-    # else
-    #   render json: {message: outcome.error_message}, status: :unprocessable_entity
-    # end
-  end
-
-  private
-
-  def conversion_record_params
-    params.permit(:id)
   end
 end
