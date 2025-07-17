@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', function () {
     downloadBtn.disabled = true;
     getLinkBtn.disabled = true;
     pdfLinkInput.value = '';
+    pdfLinkInput.style.display = 'none'; // Скрываем поле ссылки, если пустое
   };
+
+  disableButtons();
 
   fileInput.addEventListener('change', function () {
     if (fileInput.files.length > 0) {
@@ -34,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(data => {
         recordId = data.id;
 
-        // Подождем, пока PDF будет готов
+        // Подождём, пока PDF будет готов
         const tryFetchPdf = (attemptsLeft = 10) => {
           fetch(`/conversion_records/${recordId}`)
             .then(resp => {
@@ -77,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const url = getLinkBtn.getAttribute('data-url');
     if (url) {
       pdfLinkInput.value = url;
+      pdfLinkInput.style.display = 'inline-block'; // Показываем поле, когда ссылка есть
       pdfLinkInput.select();
     }
   });

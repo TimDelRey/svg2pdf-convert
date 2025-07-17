@@ -10,6 +10,6 @@ h2 Generate PDF from SVG
   .actions.mt-3
     = button_tag '⬇️ Download PDF', type: 'button', class: 'btn btn-success', id: 'download-btn', disabled: true
     = button_tag '🔗 Get Link', type: 'button', class: 'btn btn-outline-secondary', id: 'get-link-btn', disabled: true
-    = text_field_tag :pdf_link, '', class: 'form-control d-inline-block', id: 'pdf-link', readonly: true, style: 'width: 60%; margin-left: 10px;'
+    = text_field_tag :pdf_link, '', class: 'form-control d-inline-block', id: 'pdf-link', readonly: true, style: 'width: 60%; margin-left: 10px; display: none;'
     
 = javascript_include_tag 'views/conversion_records/new'
