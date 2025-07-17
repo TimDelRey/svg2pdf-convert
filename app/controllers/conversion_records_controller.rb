@@ -40,5 +40,4 @@ class ConversionRecordsController < ApplicationController
       render json: { error: 'PDF not ready' }, status: :not_found
     end
   end
-
 end

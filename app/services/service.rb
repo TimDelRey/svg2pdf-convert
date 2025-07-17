@@ -15,7 +15,7 @@ module Service
     end
 
     def failure(error_message)
-      ResultHttpStruct.new(success?: false, data: {error: error_message})
+      ResultHttpStruct.new(success?: false, data: { error: error_message })
     end
   end
 end

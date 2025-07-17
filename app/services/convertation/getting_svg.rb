@@ -1,7 +1,7 @@
 module Convertation
   class GettingSvg
     include Service
-    
+
     def initialize(svg)
       @svg = svg
     end
