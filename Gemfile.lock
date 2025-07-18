@@ -471,6 +471,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   kamal
+  nokogiri
   pg (~> 1.1)
   prawn
   prawn-svg

@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 module Convertation
   class ConvertToPdf
     include Service
@@ -15,12 +17,8 @@ module Convertation
 
     def call
       Tempfile.create(['converted', '.pdf']) do |file|
-        Prawn::Document.generate(file.path, margin: [TOP_FIELD, RIGHT_FIELD, BOTTOM_FIELD, LEFT_FIELD]) do |pdf|
-          added_watermark(pdf)
-          pdf.svg(@svg, at: [0, pdf.bounds.top], width: pdf.bounds.width)
-        end
+        create_tempfile_pdf(file)
 
-        @record.update(cropping_fields: true)
         file.rewind
 
         connect_pdf_to_record(file)
@@ -30,9 +28,29 @@ module Convertation
 
     private
 
+    def create_tempfile_pdf(file)
+      Prawn::Document.generate(file.path, margin: [TOP_FIELD, RIGHT_FIELD, BOTTOM_FIELD, LEFT_FIELD]) do |pdf|
+        width, height = scaled_svg_dimensions(pdf)
+
+        x = (pdf.bounds.width - width) / 2
+        y = pdf.bounds.top
+
+        pdf.svg(@svg, at: [x, y], width: width, height: height)
+        added_watermark(pdf)
+
+        # для отображения границ
+        # pdf.stroke_color 'ff0000'
+        # pdf.stroke_bounds
+      end
+
+      @record.update(cropping_fields: true)
+    end
+
     def added_watermark(pdf)
       pdf.fill_color '999999'
+      # pdf.fill_opacity 0.3
       pdf.draw_text WATERMARK, at: [100, 400], size: 30, rotate: 45
+      # pdf.fill_opacity 1.0
       @record.update(watermark: true)
     end
 
@@ -43,6 +61,38 @@ module Convertation
         content_type: 'application/pdf'
       )
       @record.update(status: 'PDF is ready')
+    end
+
+    def scaled_svg_dimensions(pdf)
+      svg_width, svg_height = svg_dimensions(@svg)
+
+      max_width  = pdf.bounds.width
+      max_height = pdf.bounds.height
+
+      scale = [max_width / svg_width, max_height / svg_height].min
+
+      [svg_width * scale, svg_height * scale]
+    end
+
+    def svg_dimensions(svg_content)
+      doc = Nokogiri::XML(svg_content)
+      svg = doc.at_css('svg')
+      width = svg['width']&.to_f
+      height = svg['height']&.to_f
+
+      if width.nil? || height.nil?
+        view_box = svg['viewBox']
+        if view_box
+          _, _, w, h = view_box.split.map(&:to_f)
+          width ||= w
+          height ||= h
+        end
+      end
+
+      width ||= 100
+      height ||= 100
+
+      [width, height]
     end
   end
 end

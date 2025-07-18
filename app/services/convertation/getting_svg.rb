@@ -10,8 +10,6 @@ module Convertation
       record = ConversionRecord.new
       record.svg_file.attach(@svg)
       record.status = 'svg is loaded' if record.svg_file.attached?
-      record.cropping_fields = false
-      record.watermark = false
       record.save
       record
     end
