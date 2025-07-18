@@ -11,9 +11,16 @@
 #
 FactoryBot.define do
   factory :conversion_record do
-    cropping_fields { true }
-    error_message { nil }
-    status { "pending" }
-    watermark { true }
+    cropping_fields { false }
+    status { 'svg is not loaded' }
+    watermark { false }
+
+    after(:build) do |record|
+      record.svg_file.attach(
+        io: File.open(Rails.root.join('spec/fixtures/files/valid.svg')),
+        filename: 'valid.svg',
+        content_type: 'image/svg+xml'
+      )
+    end
   end
 end
