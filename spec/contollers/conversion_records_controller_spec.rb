@@ -1,13 +1,11 @@
 require 'rails_helper'
-
-
 RSpec.describe ConversionRecordsController, type: :controller do
   let (:valid_svg) { fixture_file_upload(Rails.root.join('spec/fixtures/files/valid.svg'), 'image/svg+xml') }
   let (:invalid_file) { fixture_file_upload(Rails.root.join('spec/fixtures/files/not_svg.txt'), 'text/plain') }
   let (:ready_file) { fixture_file_upload(Rails.root.join('spec/fixtures/files/ready.pdf'), 'application/pdf') }
 
   let (:invalid_record) { FactoryBot.create(:conversion_record) }
-  let (:valid_record) { 
+  let (:valid_record) {
     record = FactoryBot.create(:conversion_record)
     record.pdf_file.attach(ready_file)
     record.save!

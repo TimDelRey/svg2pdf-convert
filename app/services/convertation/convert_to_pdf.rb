@@ -4,11 +4,11 @@ module Convertation
   class ConvertToPdf
     include Service
 
-    WATERMARK = ENV.fetch('WATERMARK')
-    LEFT_FIELD = ENV.fetch('LEFT_FIELD').to_i
-    RIGHT_FIELD = ENV.fetch('RIGHT_FIELD').to_i
-    TOP_FIELD = ENV.fetch('TOP_FIELD').to_i
-    BOTTOM_FIELD = ENV.fetch('BOTTOM_FIELD').to_i
+    WATERMARK = ENV.fetch('WATERMARK', '')
+    LEFT_FIELD = ENV.fetch('LEFT_FIELD', 0).to_i
+    RIGHT_FIELD = ENV.fetch('RIGHT_FIELD', 0).to_i
+    TOP_FIELD = ENV.fetch('TOP_FIELD', 0).to_i
+    BOTTOM_FIELD = ENV.fetch('BOTTOM_FIELD', 0).to_i
 
     def initialize(record)
       @record = record
@@ -46,14 +46,6 @@ module Convertation
       @record.update(cropping_fields: true)
     end
 
-    def added_watermark(pdf)
-      pdf.fill_color '999999'
-      # pdf.fill_opacity 0.3
-      pdf.draw_text WATERMARK, at: [100, 400], size: 30, rotate: 45
-      # pdf.fill_opacity 1.0
-      @record.update(watermark: true)
-    end
-
     def connect_pdf_to_record(file)
       @record.pdf_file.attach(
         io: file,
@@ -61,6 +53,14 @@ module Convertation
         content_type: 'application/pdf'
       )
       @record.update(status: 'PDF is ready')
+    end
+
+    def added_watermark(pdf)
+      pdf.fill_color '999999'
+      # pdf.fill_opacity 0.3
+      pdf.draw_text WATERMARK, at: [100, 400], size: 30, rotate: 45
+      # pdf.fill_opacity 1.0
+      @record.update(watermark: true)
     end
 
     def scaled_svg_dimensions(pdf)

@@ -1,6 +1,11 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
+ENV['WATERMARK'] ||= 'Test Watermark'
+ENV['LEFT_FIELD'] ||= '10'
+ENV['RIGHT_FIELD'] ||= '10'
+ENV['TOP_FIELD'] ||= '10'
+ENV['BOTTOM_FIELD'] ||= '10'
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
