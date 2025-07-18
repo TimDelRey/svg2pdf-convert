@@ -1,0 +1,65 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/conversion_records":
+    post:
+      summary: Upload SVG and convert to PDF
+      tags:
+      - ConversionRecords
+      parameters: []
+      responses:
+        '200':
+          description: SVG uploaded and PDF conversion started
+        '422':
+          description: Invalid file format
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                svg_file:
+                  type: string
+                  format: binary
+              required:
+              - svg_file
+  "/conversion_records/{id}":
+    get:
+      summary: Get PDF URL for a record
+      tags:
+      - ConversionRecords
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: PDF is ready
+        '404':
+          description: PDF not ready yet
+  "/conversion_records/{id}/download":
+    get:
+      summary: Download the converted PDF
+      tags:
+      - ConversionRecords
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: PDF downloaded
+        '422':
+          description: PDF conversion failed
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
