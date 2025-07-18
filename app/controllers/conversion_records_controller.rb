@@ -1,5 +1,6 @@
 class ConversionRecordsController < ApplicationController
   rescue_from ArgumentError, with: :handle_invalid_svg
+  before_action :set_record, only: %i[download show]
 
   def new
     @record = ConversionRecord.new
@@ -40,6 +41,10 @@ class ConversionRecordsController < ApplicationController
   end
 
   private
+
+  def set_record
+    @record = ConversionRecord.find(params[:id])
+  end
 
   def handle_invalid_svg(exception)
     Rails.logger.error("Invalid SVG file: #{exception.message}")

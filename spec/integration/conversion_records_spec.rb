@@ -1,9 +1,9 @@
 require 'swagger_helper'
 
 RSpec.describe 'ConversionRecords API', type: :request do
-  let(:valid_svg) { fixture_file_upload('files/valid.svg', 'image/svg+xml') }
-  let(:invalid_file) { fixture_file_upload('files/not_svg.txt', 'text/plain') }
-  let(:ready_pdf_path) { Rails.root.join('spec/fixtures/files/ready.pdf') }
+  let (:valid_svg) { fixture_file_upload(Rails.root.join('spec/fixtures/files/valid.svg'), 'image/svg+xml') }
+  let (:invalid_file) { fixture_file_upload(Rails.root.join('spec/fixtures/files/not_svg.txt'), 'text/plain') }
+  let (:ready_pdf_path) { fixture_file_upload(Rails.root.join('spec/fixtures/files/ready.pdf'), 'application/pdf') }
 
   let(:record_with_pdf) do
     FactoryBot.create(:conversion_record).tap do |r|
