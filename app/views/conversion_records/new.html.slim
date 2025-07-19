@@ -1,0 +1,16 @@
+.container
+  h2.text-center.mb-4 Generate PDF from SVG
+
+  = form_with model: @record, url: conversion_records_path, local: true, html: { multipart: true, id: 'upload-form' } do |f|
+    .field.text-center
+      = f.file_field :svg_file, required: true, class: 'btn btn-secondary', id: 'file-upload'
+
+    .status.text-center
+      = form_status(@record)
+
+    .actions.mt-3.text-center
+      = button_tag '⬇️ Download PDF', type: 'button', class: 'btn btn-success', id: 'download-btn', disabled: true
+      = button_tag '🔗 Get Link', type: 'button', class: 'btn btn-outline-secondary', id: 'get-link-btn', disabled: true
+      = text_field_tag :pdf_link, '', class: 'form-control d-inline-block mt-2', id: 'pdf-link', readonly: true, style: 'width: 60%; display: none;'
+
+  = javascript_include_tag 'views/conversion_records/new'
