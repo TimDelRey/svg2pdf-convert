@@ -44,19 +44,17 @@ gem "thruster", require: false
 gem 'slim-rails'
 gem 'jquery-rails'
 
-# for testing
-gem 'rspec-rails'
-gem 'factory_bot_rails'
+
 
 # for s3
 gem 'aws-sdk-s3', '~> 1.137', require: false
-gem 'bullet'
 
 # for working with pdg-files
 gem 'active_model_serializers'
 gem 'prawn'
 gem 'prawn-svg'
 gem 'nokogiri'
+gem 'rswag'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -70,19 +68,18 @@ group :development, :test do
 
   # for documentation
   gem 'annotaterb'
-  gem 'rswag'
-  gem 'rubocop-rails-omakase', require: false
 
   gem 'dotenv-rails'
+  # for testing
+  gem 'rspec-rails'
+  gem 'factory_bot_rails'
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "capybara"
+  gem "selenium-webdriver"
 end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-end
-
-group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
+  gem 'bullet'
 end
