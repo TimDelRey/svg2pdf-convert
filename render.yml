@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: myapp-web
+    env: ruby
+    region: oregon
+    plan: free
+    buildCommand: |
+      bundle config set without 'development test'
+      bundle install --jobs 4 --retry 3
+      bundle exec rails assets:precompile
+    startCommand: bundle exec puma -C config/puma.rb
+    envVars:
+      - key: RAILS_MASTER_KEY
+        fromSecret: RAILS_MASTER_KEY
+      - key: DATABASE_URL
+        fromSecret: DATABASE_URL
+    autoDeploy: true
+    postDeployCommand: bundle exec rails db:migrate
