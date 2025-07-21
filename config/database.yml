@@ -84,21 +84,22 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: svg2pdf_convert_development
+  host: db
+  username: postgres
+  password: postgres
+
+test:
+  <<: *default
+  database: svg2pdf_convert_test
+
 production:
-  primary: &primary_production
-    <<: *default
-    database: svg2pdf_convert_production
-    username: svg2pdf_convert
-    password: <%= ENV["SVG2PDF_CONVERT_DATABASE_PASSWORD"] %>
-  cache:
-    <<: *primary_production
-    database: svg2pdf_convert_production_cache
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *primary_production
-    database: svg2pdf_convert_production_queue
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *primary_production
-    database: svg2pdf_convert_production_cable
-    migrations_paths: db/cable_migrate
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
