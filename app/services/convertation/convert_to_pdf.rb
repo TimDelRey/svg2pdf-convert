@@ -56,7 +56,7 @@ module Convertation
     end
 
     def added_watermark(pdf)
-      pdf.fill_color '999999'
+      pdf.fill_color '000000'
       pdf.draw_text WATERMARK, at: [100, 400], size: 30, rotate: 45
       @record.update(watermark: true)
     end
