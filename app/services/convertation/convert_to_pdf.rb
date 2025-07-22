@@ -39,8 +39,8 @@ module Convertation
         added_watermark(pdf)
 
         # для отображения границ
-        # pdf.stroke_color 'ff0000'
-        # pdf.stroke_bounds
+        pdf.stroke_color 'ff0000'
+        pdf.stroke_bounds
       end
 
       @record.update(cropping_fields: true)
