@@ -25,7 +25,7 @@
 
 ## Документация API
 
-http://localhost:3000/api-docs/index.html
+https://svg2pdf-convert.onrender.com/api-docs/index.html
 
 ---
 
